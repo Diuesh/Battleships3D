@@ -4,10 +4,6 @@ from direct.gui.DirectGui import *
 loadPrcFile("config/conf.prc")
 
 
-def settext():
-    bk_text = ""
-
-
 class Bship(ShowBase):
     def __init__(self):
         super().__init__()
@@ -15,7 +11,7 @@ class Bship(ShowBase):
         #disable camera
         self.disable_mouse()
 
-        #camera settup
+        #camera setup
         self.camera.setHpr(-35, -24, 0)
         self.camera.setPos(-2.5, -4, 7)
 
@@ -30,17 +26,17 @@ class Bship(ShowBase):
             return 0
 
 
-        #env settup
+        #env setup
         self.setBackgroundColor(0.1, 0.6, 1.0)
 # presupunem ca matricea e de 10x10
-    v = [1]
+    def butoane(self):
+        v = [1]
+        buttons = [DirectRadioButton(text='Submarine', variable=v, value=[0], scale=0.05, pos=(1.4, 0, -0.7), command=self.planecamera(0)),
+                   DirectRadioButton(text='Barci', variable=v, value=[1], scale=0.05, pos=(1.335, 0, -0.55), command=self.planecamera(1)),
+                   DirectRadioButton(text='Avioane', variable=v, value=[2], scale=0.05, pos=(1.37, 0, -0.4), command=self.planecamera(2))]
+        for button in buttons:
+            button.setOthers(buttons)
 
-    buttons = [DirectRadioButton(text='Submarine', variable=v, value=[0], scale=0.05, pos=(1.4, 0, -0.7), command=settext()),
-               DirectRadioButton(text='Barci', variable=v, value=[1], scale=0.05, pos=(1.335, 0, -0.55), command=settext()),
-               DirectRadioButton(text='Avioane', variable=v, value=[2], scale=0.05, pos=(1.37, 0, -0.4), command=settext())]
-    for button in buttons:
-        button.setOthers(buttons)
-        planecamera()
 
 
     def cruiser(self, x, y):
