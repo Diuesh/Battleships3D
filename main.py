@@ -1,23 +1,15 @@
-from panda3d.core import loadPrcFile
-loadPrcFile("config/conf.prc")
-
-from direct.showbase.ShowBase import ShowBase
-
-class Bship(ShowBase):
-    def __init__(self):
-        super().__init__()
-
-        #disable camera
-        #self.disable_mouse()
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(0, 10, 0)
-        box.reparentTo(self.render)
-
-
-
-
-
+from Battleship import *
 
 game = Bship()
+game.cruiser(3, 4)
+game.boat(5, 6)
+game.boat(1, 5)
+game.submarine(2, 4, -5)
+game.plane(3, 4, 4)
 game.run()
+
+
+
+
+
+
