@@ -24,7 +24,6 @@ class Bship(ShowBase):
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
 
-
         #TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
 
