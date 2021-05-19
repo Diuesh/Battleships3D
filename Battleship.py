@@ -24,7 +24,6 @@ class Bship(ShowBase):
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
 
-
         #TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
 
@@ -45,94 +44,139 @@ class Bship(ShowBase):
         return Task.cont
 
 
+
     #Entities
+    #Setat coordonata z pentru  avioane,submarine
 
-    def corners_b(self, x, y):
+
+    def corners_b(self):
         box = self.loader.loadModel("models/box")
-        box.setPos(x, y, 0)
+        box.setPos(1, 4, 0)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y, 0)
+        box.setPos(10, 4, 0)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x, y + 9, 0)
+        box.setPos(1, 13, 0)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y + 9, 0)
+        box.setPos(10, 13, 0)
         box.reparentTo(self.render)
 
-    def corners_a(self, x, y, z):
+    def corners_a(self):
         box = self.loader.loadModel("models/box")
-        box.setPos(x, y, z)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y, z)
+        box.setPos(1, 4, 14)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x, y + 9, z)
+        box.setPos(10, 4, 14)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y + 9, z)
-        box.reparentTo(self.render)
-
-    def corners_s(self, x, y, z):
-        box = self.loader.loadModel("models/box")
-        box.setPos(x, y, z)
+        box.setPos(1, 13, 14)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y, z)
+        box.setPos(10, 13, 14)
+        box.reparentTo(self.render)
+
+    def corners_s(self):
+        box = self.loader.loadModel("models/box")
+        box.setPos(1, 4, -14)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x, y + 9, z)
+        box.setPos(10, 4, -14)
         box.reparentTo(self.render)
 
         box = self.loader.loadModel("models/box")
-        box.setPos(x + 9, y + 9, z)
+        box.setPos(1, 13, -14)
+        box.reparentTo(self.render)
+
+        box = self.loader.loadModel("models/box")
+        box.setPos(10, 13, -14)
         box.reparentTo(self.render)
 
     def cruiser(self, x, y):
-        box = self.loader.loadModel("models/box")
-        box.setPos(x, y, 0)
-        box.reparentTo(self.render)
 
-        box = self.loader.loadModel("models/box")
-        box.setPos(x, y+1, 0)
-        box.reparentTo(self.render)
+        if (1 < x < 10 and 4 < y < 13):
 
-        box = self.loader.loadModel("models/box")
-        box.setPos(x, y+2, 0)
-        box.reparentTo(self.render)
+            box = self.loader.loadModel("models/box")
+            box.setPos(x, y, 0)
+            box.reparentTo(self.render)
+
+            box = self.loader.loadModel("models/box")
+            box.setPos(x, y+1, 0)
+            box.reparentTo(self.render)
+
+            box = self.loader.loadModel("models/box")
+            box.setPos(x, y+2, 0)
+            box.reparentTo(self.render)
+        else:
+            raise Exception('Object outside Arena')
 
     def boat(self, x, y):
-        box = self.loader.loadModel("models/box")
-        box.setPos(x, y, 0)
-        box.reparentTo(self.render)
-
-    def submarine(self, x, y, z):
-        if(z<0):
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y, z)
-            box.reparentTo(self.render)
+        if (1 < x < 10 and 4 < y < 13):
 
             box = self.loader.loadModel("models/box")
-            box.setPos(x, y+1, z)
+            box.setPos(x, y, 0)
             box.reparentTo(self.render)
         else:
-            print("Submarines dont float")
+            raise Exception('Object outside Arena')
 
-    def plane(self, x, y, z):
-        if (z >= 0):
+    def submarine(self, x, y):
+        if(1<x<10 and 4<y<13):
+
             box = self.loader.loadModel("models/box")
-            box.setPos(x, y, z)
+            box.setPos(x, y, -14)
             box.reparentTo(self.render)
 
+            box = self.loader.loadModel("models/box")
+            box.setPos(x, y+1, -14)
+            box.reparentTo(self.render)
         else:
-            print("Planes dont swim")
+            raise Exception('Object outside Arena')
+
+
+    def plane(self, x, y):
+        if (1 < x < 10 and 4 < y < 13):
+
+            box = self.loader.loadModel("models/box")
+            box.setPos(x, y, 14)
+            box.reparentTo(self.render)
+        else:
+            raise Exception('Object outside Arena')
+
+
+    #alegerea pozitiilor
+
+    def pieces_settup(self):
+        sx1 = int(input("X submarin 1:"))
+        sy1 = int(input("Y submarin 1:"))
+        sx2 = int(input("X submarin 2:"))
+        sy2 = int(input("Y submarin 2:"))
+
+        ax1 = int(input("X avion 1:"))
+        ay1 = int(input("Y avion 1:"))
+        ax2 = int(input("X avion 2:"))
+        ay2 = int(input("Y avion 2:"))
+
+        cx = int(input("X nava mare 1:"))
+        cy = int(input("Y nava mare 1:"))
+        bx1 = int(input("X barca 1:"))
+        by1 = int(input("Y barca 1:"))
+        bx2 = int(input("X barca 2:"))
+        by2 = int(input("Y barca 2:"))
+
+        self.submarine(sx1, sy1)
+        self.submarine(sx2, sy2)
+
+        self.plane(ax1, ay1)
+        self.plane(ax2, ay2)
+
+        self.cruiser(cx, cy)
+        self.boat(bx1, by1)
+        self.boat(bx2, by2)
