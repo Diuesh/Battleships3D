@@ -1,4 +1,3 @@
-from direct.gui.DirectButton import DirectButton
 from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectEntry import DirectEntry
 from direct.gui.DirectFrame import DirectFrame
@@ -36,46 +35,21 @@ class Bship(ShowBase):
         #env settup
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
-
-
         self.myFrame = DirectFrame(frameColor=(0, 0, 0, 0.3),
                               frameSize=(-0.2, 1, -0.2, 0.5),
                               pos=(1, 0, -0.75))
-
-        # bk_text = "My text"
-        # textObject = OnscreenText(text=bk_text, scale=0.05,
-        #                           fg=(1, 1, 1, 1), mayChange=1, pos=(0, 1, 0))
-        # textObject.reparentTo(self.myFrame)
 
         # add text entry
         self.entry = DirectEntry(text="", scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand = self.clearText)
         self.entry.reparentTo(self.myFrame)
         print(self.entry.getPos())
 
-
-    #     self.accept("mouse1", self.mouse_click)
-    #     self.accept("mouse1-up", self.mouse_click)
-    #
-    #
-    # def mouse_click(self):
-    #     md1 = self.win.getPointer(0)
-    #     mx = md1.getX()
-    #     my = md1.getY()
-    #     if (mx != self.myFrame.getPos()[0] and my != self.myFrame.getPos()[2]):
-    #         self.entry['focus'] = 0
-    #     else:
-    #         self.entry['focus'] = 1
-
-
-    def clearText(self):
-        self.entry.enterText('')
-
-
-
         # TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
 
 
+    def clearText(self):
+        self.entry.enterText('')
 
     def event(self, bk_text):
         try:
@@ -242,7 +216,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Submarine deployed ' +str(self.s) + '/2')
+        print('Submarine deployed ' + str(self.s) + '/2')
         self.PLpos.append([x, y])
         self.submarine(x, y)
 
@@ -250,7 +224,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Boat deployed ' +str(self.b) + '/2')
+        print('Boat deployed ' + str(self.b) + '/2')
         self.PLpos.append([x, y])
         self.boat(x, y)
 
@@ -258,7 +232,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Cruiser deployed ' +str(self.c) + '/1')
+        print('Cruiser deployed ' + str(self.c) + '/1')
         self.PLpos.append([x, y])
         self.cruiser(x, y)
 
@@ -266,7 +240,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Plane deployed ' +str(self.p) + '/2')
+        print('Plane deployed ' + str(self.p) + '/2')
         self.PLpos.append([x, y])
         self.plane(x, y)
 
@@ -303,24 +277,32 @@ class Bship(ShowBase):
 
 
     def check(self, bk_text):
-        l = []
-        AIl = []
-        if bk_text == "":
-            pass
+        if self.PLpos == []:
+            print('You lost!')
+        elif self.AIpos == []:
+            print('You won!')
         else:
-            x, y = bk_text.split(" ")
-
-            l.append(int(x))
-            l.append(int(y))
-            print(l)
-            if (1 < int(x) < 10 and 4 < int(y) < 13):
-                if l in self.AIpos:
-                    print("Lovit")
-                else:
-                    print("Blyat")
+            l = []
+            if bk_text == "":
+                pass
             else:
-                print('Outside Area')
+                x, y = bk_text.split(" ")
 
+                l.append(int(x))
+                l.append(int(y))
+                print(l)
+                if (1 < int(x) < 10 and 4 < int(y) < 13):
+                    if l in self.AIpos:
+                        print("Lovit")
+                        self.PLpos -= l
+                    else:
+                        print("Blyat")
+                else:
+                    print('Outside Area')
+
+
+
+        AIl =[]
         AIx = random.randint(2, 9)
         AIy = random.randint(5, 12)
         AIl.append(AIx)
@@ -341,5 +323,8 @@ class Bship(ShowBase):
                     self.AImem.append(AIl)
 
 
-        print(AIl)
-
+game = Bship()
+game.corners_b()
+game.corners_a()
+game.corners_s()
+game.run()
