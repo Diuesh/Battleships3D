@@ -1,7 +1,4 @@
-import timeit
-
 from direct.gui.OnscreenText import OnscreenText
-from direct.gui.OnscreenImage import OnscreenImage
 from direct.gui.DirectEntry import DirectEntry
 from direct.gui.DirectFrame import DirectFrame
 from direct.task.TaskManagerGlobal import taskMgr
@@ -19,6 +16,7 @@ class Bship(ShowBase):
     PLpos = []
     AIpos = []
     AImem = []
+    logText = ''
     c = 0
     s = 0
     b = 0
@@ -34,113 +32,84 @@ class Bship(ShowBase):
         self.camera.setPos(-2.5, -4, 7)
 
         #disable camera
-        self.disable_mouse()
+        #self.disable_mouse()
 
         #env settup
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
-
         self.myFrame = DirectFrame(frameColor=(0, 0, 0, 0.3),
-                              frameSize=(-0.2, 1, -0.2, 0.5),
+                              frameSize=(-0.2, 1, -0.3, 0.155),
                               pos=(1, 0, -0.75))
 
-        # bk_text = "My text"
-        # textObject = OnscreenText(text=bk_text, scale=0.05,
-        #                           fg=(1, 1, 1, 1), mayChange=1, pos=(0, 1, 0))
-        # textObject.reparentTo(self.myFrame)
-
         # add text entry
-        self.entry = DirectEntry(text="", scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand = self.clearText)
+        self.entry = DirectEntry(text='', scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand=self.clearText, pos=(-0.195, 0, -0.235))
         self.entry.reparentTo(self.myFrame)
         print(self.entry.getPos())
 
-
-    #     self.accept("mouse1", self.mouse_click)
-    #     self.accept("mouse1-up", self.mouse_click)
-    #
-    #
-    # def mouse_click(self):
-    #     md1 = self.win.getPointer(0)
-    #     mx = md1.getX()
-    #     my = md1.getY()
-    #     if (mx != self.myFrame.getPos()[0] and my != self.myFrame.getPos()[2]):
-    #         self.entry['focus'] = 0
-    #     else:
-    #         self.entry['focus'] = 1
-        constanttext = OnscreenText(text="write h for help, n to hide help", pos =(0.4, -0.8), scale= 0.05, fg=(1, 0.5, 0.5, 0.7), mayChange=0)
-        self.htext = OnscreenText(text=self.helptext,pos=(0.4, -0.6), scale=0.05, fg=(1, 0.5, 0.5, 0.7), mayChange=1)
-        self.b = OnscreenImage(parent=self.render2d, image="modeleBS3D/1.jpg")
-        self.cam.node().getDisplayRegion(0).setSort(20)
-
-    # "Ctrl + 1/2/3 schimba planul\naducarea se face in felul urmator:\ns/p/b coord x apoi coord y Ex: b 5 8"
-    def clearText(self):
-        self.entry.enterText('')
-
-
+        self.logTextBox = OnscreenText(text = 'Test', pos = (-0.145, 0.11, 0), scale = 0.05, align=TextNode.ALeft)
+        self.logTextBox.reparentTo(self.myFrame)
+        constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05,fg=(1, 0.5, 0.5, 0.7), mayChange=0)
+        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(1, 0.5, 0.5, 0.9),mayChange=1)
 
         # TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
 
 
+    def clearText(self):
+        self.entry.enterText('')
 
     def event(self, bk_text):
         try:
             if bk_text[0] == 's':
                 if self.s <= 1:
-                    self.s += 1
+
                     t = bk_text[2:]
                     self.submarineSpawn(t)
                 else:
-                    print('submarines limit reached 2/2')
+                    self.logTextBox.text = 'Submarines limit reached 2/2'
             elif bk_text[0] == 'b':
                 if self.b <= 1:
-                    self.b += 1
+
                     t = bk_text[2:]
                     self.boatSpawn(t)
                 else:
-                    print('boats limit reached 2/2')
+                    self.logTextBox.text = 'Boats limit reached 2/2'
             elif bk_text[0] == 'c':
                 if self.c == 0:
-                    self.c += 1
                     t = bk_text[2:]
                     self.cruiserSpawn(t)
                 else:
-                    print('cruisers limit reached 1/1')
+                    self.logTextBox.text = 'Cruisers limit reached 1/1'
+            elif bk_text[0] == 'h':
+                self.htext.text = "Ctrl + 1/2/3 schimba planul\nplasarea se face in felul urmator:\ns/p/b/c coord x apoi coord y Ex: b 5 8\nalt+F4 pentru inchidere"
+            elif bk_text[0] == 'n':
+                self.htext.text = ""
             elif bk_text[0] == 'p':
                 if self.p <= 1:
-                    self.p += 1
                     t = bk_text[2:]
                     self.planeSpawn(t)
                 else:
-                    print('planes limit reached 2/2')
-            elif bk_text[0] == 'h':
-                self.htext.text = "Ctrl + 1/2/3 schimba planul\nplasarea se face in felul urmator:\ns/p/b/c coord x apoi coord y Ex: b 5 8"
-            elif bk_text[0] == 'n':
-                self.htext.text = ""
+                    self.logTextBox.text = 'Planes limit reached 2/2'
             else:
                 if self.c != 1 and self.b != 2 and self.s != 2 and self.p != 2:
-                    print('Preperation phase still ongoing \nPlease deploy all your units \n')
+                    self.logTextBox.text = 'Preparation phase still ongoing\nPlease deploy all your units\n'
                 else:
                     self.check(bk_text)
         except ValueError:
-            print('Incorrect input')
+            self.logTextBox.text = 'Incorrect input!Try again'
 
 
     def movCameraTask(self, task):
+
         pos = self.camera.getPos()
-        imag = self.b.getImage()
         if keyboard.is_pressed('ctrl'):
             if keyboard.is_pressed('1'):
                 pos.z = 7
-                imag = "modeleBS3D/1.jpg"
             if keyboard.is_pressed('2'):
                 pos.z = -7
-                imag = "modeleBS3D/subapa.jpg"
             if keyboard.is_pressed('3'):
                 pos.z = 21
-                imag = "modeleBS3D/cer.jpg"
         self.camera.setPos(pos)
-        self.b.setImage(imag)
 
         return task.cont
 
@@ -149,105 +118,89 @@ class Bship(ShowBase):
     #Entities
 
     def corners_b(self):
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 4, 0)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 4, 0)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 13, 0)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 13, 0)
-        box.reparentTo(self.render)
+        for i in range(2, 10):
+            for j in range(5, 13):
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(i, j, 0)
+                box.setScale(0.5)
+                texocean = self.loader.load_texture("modeleBS3D/oceancub.jpg")
+                box.setTexture(texocean)
+                box.reparentTo(self.render)
 
     def corners_a(self):
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 4, 14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 4, 14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 13, 14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 13, 14)
-        box.reparentTo(self.render)
+        for i in range(2, 10):
+            for j in range(5, 13):
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(i, j, 14)
+                box.setScale(0.5)
+                texcer = self.loader.load_texture("modeleBS3D/noricub.jpg")
+                box.setTexture(texcer)
+                box.reparentTo(self.render)
 
     def corners_s(self):
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 4, -14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 4, -14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(1, 13, -14)
-        box.reparentTo(self.render)
-
-        box = self.loader.loadModel("models/box")
-        box.setPos(10, 13, -14)
-        box.reparentTo(self.render)
+        for i in range(2, 10):
+            for j in range(5, 13):
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(i, j, -14)
+                box.setScale(0.5)
+                texsubapa = self.loader.load_texture("modeleBS3D/subapanisip.jpg")
+                box.setColor(0.2,0.5,0.8)
+                box.setTexture(texsubapa)
+                box.reparentTo(self.render)
 
     def cruiser(self, x, y):
 
         if (1 < x < 10 and 4 < y < 11):
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y, 0)
-            box.reparentTo(self.render)
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y+1, 0)
-            box.reparentTo(self.render)
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y+2, 0)
-            box.reparentTo(self.render)
+            carrier = self.loader.loadModel("modeleBS3D/Carrier.obj")
+            carrier.setPos(x, y + 1, 0.5)
+            carrier.setHpr(-180, 90, 0)
+            carrier.setScale(0.0125, 0.01, 0.01)
+            texcarrier = self.loader.load_texture("modeleBS3D/texboat3.jpg")
+            carrier.setTexture(texcarrier)
+            carrier.reparentTo(self.render)
+            self.c += 1
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
     def boat(self, x, y):
         if (1 < x < 10 and 4 < y < 13):
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y, 0)
-            box.reparentTo(self.render)
+            boat2 = self.loader.load_model("modeleBS3D/Boat2.obj")
+            boat2.setPos(x , y , 0.5)
+            boat2.setHpr(-90, 0, 0)
+            boat2.setScale(0.0005)
+            texboat2 = self.loader.load_texture("modeleBS3D/texboat3.jpg")
+            boat2.setTexture(texboat2)
+            boat2.reparentTo(self.render)
+            self.b += 1
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
     def submarine(self, x, y):
         if(1<x<10 and 4<y<12):
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y, -14)
-            box.reparentTo(self.render)
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y+1, -14)
-            box.reparentTo(self.render)
+            sub1 = self.loader.loadModel("modeleBS3D/Submarine1.obj")
+            sub1.setPos(x + 0.425, y + 1.5, -13)
+            sub1.setHpr(-180, 90, 0)
+            sub1.setScale(0.04)
+            texsub1 = self.loader.load_texture("modeleBS3D/texplane.jpg")
+            sub1.setTexture(texsub1)
+            sub1.reparentTo(self.render)
+            self.s += 1
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
 
     def plane(self, x, y):
         if (1 < x < 10 and 4 < y < 13):
-
-            box = self.loader.loadModel("models/box")
-            box.setPos(x, y, 14)
-            box.reparentTo(self.render)
+            plane3 = self.loader.loadModel("modeleBS3D/Plane5.obj")
+            plane3.setPos(x, y, 15)
+            plane3.setHpr(180, -270, 180)
+            plane3.setScale(0.08)
+            texplane3 = self.loader.load_texture("modeleBS3D/texplane3.jpg")
+            plane3.setTexture(texplane3)
+            plane3.reparentTo(self.render)
+            self.p += 1
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
 
     #Model Spawn
@@ -256,33 +209,37 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Submarine deployed ' +str(self.s) + '/2')
+        self.logTextBox.text = 'Submarine deployed ' + str(self.s + 1) + '/2'
         self.PLpos.append([x, y])
         self.submarine(x, y)
+
 
     def boatSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Boat deployed ' +str(self.b) + '/2')
+        self.logTextBox.text = 'Boat deployed ' + str(self.b + 1) + '/2'
         self.PLpos.append([x, y])
         self.boat(x, y)
+
 
     def cruiserSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Cruiser deployed ' +str(self.c) + '/1')
+        self.logTextBox.text = 'Cruiser deployed ' + str(self.c + 1) + '/1'
         self.PLpos.append([x, y])
         self.cruiser(x, y)
+
 
     def planeSpawn(self,bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Plane deployed ' +str(self.p) + '/2')
+        self.logTextBox.text = 'Plane deployed ' + str(self.p + 1) + '/2'
         self.PLpos.append([x, y])
         self.plane(x, y)
+
 
 
     def AISettup(self):
@@ -317,30 +274,38 @@ class Bship(ShowBase):
 
 
     def check(self, bk_text):
-        l = []
-        AIl = []
-        if bk_text == "":
-            pass
+        if self.PLpos == []:
+            self.logTextBox.text = 'You lost!'
+        elif self.AIpos == []:
+            self.logTextBox.text = 'You won!'
         else:
-            x, y = bk_text.split(" ")
-
-            l.append(int(x))
-            l.append(int(y))
-            print(l)
-            if (1 < int(x) < 10 and 4 < int(y) < 13):
-                if l in self.AIpos:
-                    print("Lovit")
-                else:
-                    print("Blyat")
+            l = []
+            if bk_text == "":
+                pass
             else:
-                print('Outside Area')
+                x, y = bk_text.split(" ")
 
+                l.append(int(x))
+                l.append(int(y))
+                print(l)
+                if (1 < int(x) < 10 and 4 < int(y) < 13):
+                    if l in self.AIpos:
+                        self.logTextBox.text = "Hit"
+                        self.PLpos -= l
+                    else:
+                        self.logTextBox.text = "Miss"
+                else:
+                    self.logTextBox.text = 'Outside Area'
+
+
+
+        AIl =[]
         AIx = random.randint(2, 9)
         AIy = random.randint(5, 12)
         AIl.append(AIx)
         AIl.append(AIy)
         if AIl in self.PLpos:
-            print('One of our units has been hit!')
+            self.logTextBox.text = 'One of our units has been hit!'
         else:
             for i in range(len(self.AImem) + 1):
                 if AIl in self.AImem:
@@ -355,4 +320,8 @@ class Bship(ShowBase):
                     self.AImem.append(AIl)
 
 
-        print(AIl)
+game = Bship()
+game.corners_b()
+game.corners_a()
+game.corners_s()
+game.run()

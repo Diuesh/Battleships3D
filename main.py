@@ -7,6 +7,7 @@ def PlayerArena():
     game.corners_s()
     game.run()
 
+
 def AIArena():
     # game.enemycruiser(13, 14)
     # game.enemyboat(15, 16)
