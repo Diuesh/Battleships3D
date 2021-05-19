@@ -1,12 +1,28 @@
 from Battleship import *
+
 game = Bship()
-game.cruiser(3, 4)
-game.boat(5, 6)
-game.boat(1, 5)
-game.submarine(2, 4, -14)
-game.plane(3, 4, 14)
-game.corners_b(1, 4)
-game.corners_a(1, 4, 14)
-game.corners_s(1, 4, -14)
-game.butoane()
-game.run()
+def PlayerArena():
+    game.corners_b()
+    game.corners_a()
+    game.corners_s()
+    game.run()
+
+def AIArena():
+    # game.enemycruiser(13, 14)
+    # game.enemyboat(15, 16)
+    # game.enemyboat(11, 15)
+    # game.enemysubmarine(12, 14, -14)
+    # game.enemyplane(13, 14, 14)
+    # game.enemycorners_b(11, 14)
+    # game.enemycorners_a(11, 14, 14)
+    # game.enemycorners_s(11, 14, -14)
+    pass
+PlayerArena()
+AIArena()
+
+
+
+
+
+
+
