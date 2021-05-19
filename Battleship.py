@@ -32,7 +32,7 @@ class Bship(ShowBase):
         self.camera.setPos(-2.5, -4, 7)
 
         #disable camera
-        #self.disable_mouse()
+        self.disable_mouse()
 
         #env settup
         self.setBackgroundColor(0.1, 0.6, 1.0)
@@ -46,10 +46,11 @@ class Bship(ShowBase):
         self.entry.reparentTo(self.myFrame)
         print(self.entry.getPos())
 
-        self.logTextBox = OnscreenText(text = 'Test', pos = (-0.145, 0.11, 0), scale = 0.05, align=TextNode.ALeft)
+        self.logTextBox = OnscreenText(text = '', pos = (-0.145, 0.11, 0), scale = 0.05, align=TextNode.ALeft)
         self.logTextBox.reparentTo(self.myFrame)
-        constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05,fg=(1, 0.5, 0.5, 0.7), mayChange=0)
-        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(1, 0.5, 0.5, 0.9),mayChange=1)
+        constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05,fg=(0, 0, 0, 1), mayChange=0)
+        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(0, 0, 0, 1),mayChange=1)
+        coordtext = OnscreenText(text="b(1<x<10 si 4<y<13),\ns(1<x<10 si 4<y<12),\np(1<x<10 si 4<y<13),\nc(1<x<10 si 4<y<11)", pos=(1.5, -0.4), scale=0.05,fg=(0, 0, 0, 1), mayChange=0)
 
         # TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
