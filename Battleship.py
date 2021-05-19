@@ -16,6 +16,7 @@ class Bship(ShowBase):
     PLpos = []
     AIpos = []
     AImem = []
+    logText = ''
     c = 0
     s = 0
     b = 0
@@ -36,13 +37,16 @@ class Bship(ShowBase):
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
         self.myFrame = DirectFrame(frameColor=(0, 0, 0, 0.3),
-                              frameSize=(-0.2, 1, -0.2, 0.5),
+                              frameSize=(-0.2, 1, -0.3, 0.155),
                               pos=(1, 0, -0.75))
 
         # add text entry
-        self.entry = DirectEntry(text="", scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand = self.clearText)
+        self.entry = DirectEntry(text='', scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand=self.clearText, pos=(-0.195, 0, -0.235))
         self.entry.reparentTo(self.myFrame)
         print(self.entry.getPos())
+
+        self.logTextBox = OnscreenText(text = 'Test', pos = (-0.145, 0.11, 0), scale = 0.05, align=TextNode.ALeft)
+        self.logTextBox.reparentTo(self.myFrame)
 
         # TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
@@ -59,35 +63,35 @@ class Bship(ShowBase):
                     t = bk_text[2:]
                     self.submarineSpawn(t)
                 else:
-                    print('submarines limit reached 2/2')
+                    self.logTextBox.text = 'Submarines limit reached 2/2'
             elif bk_text[0] == 'b':
                 if self.b <= 1:
                     self.b += 1
                     t = bk_text[2:]
                     self.boatSpawn(t)
                 else:
-                    print('boats limit reached 2/2')
+                    self.logTextBox.text = 'Boats limit reached 2/2'
             elif bk_text[0] == 'c':
                 if self.c == 0:
                     self.c += 1
                     t = bk_text[2:]
                     self.cruiserSpawn(t)
                 else:
-                    print('cruisers limit reached 1/1')
+                    self.logTextBox.text = 'Cruisers limit reached 1/1'
             elif bk_text[0] == 'p':
                 if self.p <= 1:
                     self.p += 1
                     t = bk_text[2:]
                     self.planeSpawn(t)
                 else:
-                    print('planes limit reached 2/2')
+                    self.logTextBox.text = 'Planes limit reached 2/2'
             else:
                 if self.c != 1 and self.b != 2 and self.s != 2 and self.p != 2:
-                    print('Preperation phase still ongoing \nPlease deploy all your units \n')
+                    self.logTextBox.text = 'Preperation phase still ongoing \nPlease deploy all your units \n'
                 else:
                     self.check(bk_text)
         except ValueError:
-            print('Incorrect input')
+            self.logTextBox.text = 'Incorrect input!Try again'
 
 
     def movCameraTask(self, task):
@@ -175,7 +179,7 @@ class Bship(ShowBase):
             box.setPos(x, y+2, 0)
             box.reparentTo(self.render)
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
     def boat(self, x, y):
         if (1 < x < 10 and 4 < y < 13):
@@ -184,7 +188,7 @@ class Bship(ShowBase):
             box.setPos(x, y, 0)
             box.reparentTo(self.render)
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
     def submarine(self, x, y):
         if(1<x<10 and 4<y<12):
@@ -197,7 +201,7 @@ class Bship(ShowBase):
             box.setPos(x, y+1, -14)
             box.reparentTo(self.render)
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
 
     def plane(self, x, y):
@@ -207,7 +211,7 @@ class Bship(ShowBase):
             box.setPos(x, y, 14)
             box.reparentTo(self.render)
         else:
-            print('Object outside Area')
+            self.logTextBox.text = 'Object outside Area'
 
 
     #Model Spawn
@@ -216,7 +220,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Submarine deployed ' + str(self.s) + '/2')
+        self.logTextBox.text = 'Submarine deployed ' + str(self.s) + '/2'
         self.PLpos.append([x, y])
         self.submarine(x, y)
 
@@ -224,7 +228,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Boat deployed ' + str(self.b) + '/2')
+        self.logTextBox.text = 'Boat deployed ' + str(self.b) + '/2'
         self.PLpos.append([x, y])
         self.boat(x, y)
 
@@ -232,7 +236,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Cruiser deployed ' + str(self.c) + '/1')
+        self.logTextBox.text = 'Cruiser deployed ' + str(self.c) + '/1'
         self.PLpos.append([x, y])
         self.cruiser(x, y)
 
@@ -240,7 +244,7 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        print('Plane deployed ' + str(self.p) + '/2')
+        self.logTextBox.text = 'Plane deployed ' + str(self.p) + '/2'
         self.PLpos.append([x, y])
         self.plane(x, y)
 
@@ -278,9 +282,9 @@ class Bship(ShowBase):
 
     def check(self, bk_text):
         if self.PLpos == []:
-            print('You lost!')
+            self.logTextBox.text = 'You lost!'
         elif self.AIpos == []:
-            print('You won!')
+            self.logTextBox.text = 'You won!'
         else:
             l = []
             if bk_text == "":
@@ -293,12 +297,12 @@ class Bship(ShowBase):
                 print(l)
                 if (1 < int(x) < 10 and 4 < int(y) < 13):
                     if l in self.AIpos:
-                        print("Lovit")
+                        self.logTextBox.text = "Hit"
                         self.PLpos -= l
                     else:
-                        print("Blyat")
+                        self.logTextBox.text = "Miss"
                 else:
-                    print('Outside Area')
+                    self.logTextBox.text = 'Outside Area'
 
 
 
@@ -308,7 +312,7 @@ class Bship(ShowBase):
         AIl.append(AIx)
         AIl.append(AIy)
         if AIl in self.PLpos:
-            print('One of our units has been hit!')
+            self.logTextBox.text = 'One of our units has been hit!'
         else:
             for i in range(len(self.AImem) + 1):
                 if AIl in self.AImem:
