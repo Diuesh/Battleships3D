@@ -2,13 +2,12 @@ from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectEntry import DirectEntry
 from direct.gui.DirectFrame import DirectFrame
 from direct.task.TaskManagerGlobal import taskMgr
+from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 import keyboard
 import random
 
 loadPrcFile("config/conf.prc")
-
-from direct.showbase.ShowBase import ShowBase
 
 
 class Bship(ShowBase):
@@ -27,34 +26,44 @@ class Bship(ShowBase):
         super().__init__()
 
         self.AISettup()
-        #camera settup
+        # camera settup
         self.camera.setHpr(-35, -24, 0)
         self.camera.setPos(-2.5, -4, 7)
 
-        #disable camera
+        # disable camera
         self.disable_mouse()
 
-        #env settup
+        # env settup
         self.setBackgroundColor(0.1, 0.6, 1.0)
 
-        self.myFrame = DirectFrame(frameColor=(0, 0, 0, 0.3),
-                              frameSize=(-0.2, 1, -0.3, 0.155),
-                              pos=(1, 0, -0.75))
+        self.myFrame = DirectFrame(frameColor=(0, 0, 0, 0.3), frameSize=(-0.2, 1, -0.3, 0.155), pos=(1, 0, -0.75))
 
         # add text entry
         self.entry = DirectEntry(text='', scale=.05,  command=self.event, numLines=1, focus=1, focusOutCommand=self.clearText, pos=(-0.195, 0, -0.235))
         self.entry.reparentTo(self.myFrame)
         print(self.entry.getPos())
 
-        self.logTextBox = OnscreenText(text = '', pos = (-0.145, 0.11, 0), scale = 0.05, align=TextNode.ALeft)
+        self.logTextBox = OnscreenText(text='', pos=(-0.145, 0.11, 0), scale=0.05, align=TextNode.ALeft)
         self.logTextBox.reparentTo(self.myFrame)
-        constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05,fg=(0, 0, 0, 1), mayChange=0)
-        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(0, 0, 0, 1),mayChange=1)
-        coordtext = OnscreenText(text="b(1<x<10 si 4<y<13),\ns(1<x<10 si 4<y<12),\np(1<x<10 si 4<y<13),\nc(1<x<10 si 4<y<11)", pos=(1.5, -0.4), scale=0.05,fg=(0, 0, 0, 1), mayChange=0)
+        constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05, fg=(0, 0, 0, 1), mayChange=0)
+        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(0, 0, 0, 1), mayChange=1)
+        coordtext = OnscreenText(text="b(1<x<10 si 4<y<13),\ns(1<x<10 si 4<y<12),\np(1<x<10 si 4<y<13),\nc(1<x<10 si 4<y<11)", pos=(1.5, -0.4), scale=0.05, fg=(0, 0, 0, 1), mayChange=0)
+        mksgridp = "     Planes\n  2    3    4    5    6    7    8    9\n5 |     |     |     |     |     |     |     |     |\n   --------------------------------\n6 |     |     |     |     |     |     |     |     |\n   --------------------------------\n7 |     |     |     |     |     |     |     |     |\n   --------------------------------\n8 |     |     |     |     |     |     |     |     |\n   --------------------------------\n" \
+                   "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
+        mksgridb = "    Boats\n  2    3    4    5    6    7    8    9\n5 |     |     |     |     |     |     |     |     |\n   --------------------------------\n6 |     |     |     |     |     |     |     |     |\n   --------------------------------\n7 |     |     |     |     |     |     |     |     |\n   --------------------------------\n8 |     |     |     |     |     |     |     |     |\n   --------------------------------\n" \
+                   "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
+        mksgrids = "Submarines\n  2    3    4    5    6    7    8    9\n5 |     |     |     |     |     |     |     |     |\n   --------------------------------\n6 |     |     |     |     |     |     |     |     |\n   --------------------------------\n7 |     |     |     |     |     |     |     |     |\n   --------------------------------\n8 |     |     |     |     |     |     |     |     |\n   --------------------------------\n" \
+                   "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
+        showx = OnscreenText(text="X", pos=(0.56, 0.43), scale=0.065, fg=(0, 0, 0, 1), mayChange=0)
+        showy = OnscreenText(text="Y", pos=(0.325, 0.675), scale=0.065, fg=(0, 0, 0, 1), mayChange=0)
+        xorient = OnscreenText(text="X", pos=(-0.7, 0.45), scale=0.2, fg=(0, 0, 0, 1), mayChange=0)
+        yorient = OnscreenText(text="Y", pos=(-1.25, -0.75), scale=0.2, fg=(0, 0, 0, 1), mayChange=0)
+        makeshiftgridplane = OnscreenText(text=mksgridp, pos=(1.55, 0.95), scale=0.03, fg=(0, 0, 0, 1), mayChange=0)
+        makeshiftgridboat = OnscreenText(text=mksgridb, pos=(1.05, 0.95), scale=0.03, fg=(0, 0, 0, 1), mayChange=0)
+        makeshiftgridsubmar = OnscreenText(text=mksgrids, pos=(0.55, 0.95), scale=0.03, fg=(0, 0, 0, 1), mayChange=0)
 
         # TaskManager
         taskMgr.add(self.movCameraTask, 'movCameraTask')
-
 
     def clearText(self):
         self.entry.enterText('')
@@ -99,7 +108,6 @@ class Bship(ShowBase):
         except ValueError:
             self.logTextBox.text = 'Incorrect input!Try again'
 
-
     def movCameraTask(self, task):
 
         pos = self.camera.getPos()
@@ -114,9 +122,7 @@ class Bship(ShowBase):
 
         return task.cont
 
-
-
-    #Entities
+    # Entities
 
     def corners_b(self):
         for i in range(2, 10):
@@ -145,13 +151,13 @@ class Bship(ShowBase):
                 box.setPos(i, j, -14)
                 box.setScale(0.5)
                 texsubapa = self.loader.load_texture("modeleBS3D/subapanisip.jpg")
-                box.setColor(0.2,0.5,0.8)
+                box.setColor(0.2, 0.5, 0.8)
                 box.setTexture(texsubapa)
                 box.reparentTo(self.render)
 
     def cruiser(self, x, y):
 
-        if (1 < x < 10 and 4 < y < 11):
+        if 1 < x < 10 and 4 < y < 11:
             carrier = self.loader.loadModel("modeleBS3D/Carrier.obj")
             carrier.setPos(x, y + 1, 0.5)
             carrier.setHpr(-180, 90, 0)
@@ -164,9 +170,9 @@ class Bship(ShowBase):
             self.logTextBox.text = 'Object outside Area'
 
     def boat(self, x, y):
-        if (1 < x < 10 and 4 < y < 13):
+        if 1 < x < 10 and 4 < y < 13:
             boat2 = self.loader.load_model("modeleBS3D/Boat2.obj")
-            boat2.setPos(x , y , 0.5)
+            boat2.setPos(x, y, 0.5)
             boat2.setHpr(-90, 0, 0)
             boat2.setScale(0.0005)
             texboat2 = self.loader.load_texture("modeleBS3D/texboat3.jpg")
@@ -177,7 +183,7 @@ class Bship(ShowBase):
             self.logTextBox.text = 'Object outside Area'
 
     def submarine(self, x, y):
-        if(1<x<10 and 4<y<12):
+        if 1 < x < 10 and 4 < y < 12:
             sub1 = self.loader.loadModel("modeleBS3D/Submarine1.obj")
             sub1.setPos(x + 0.425, y + 1.5, -13)
             sub1.setHpr(-180, 90, 0)
@@ -189,9 +195,8 @@ class Bship(ShowBase):
         else:
             self.logTextBox.text = 'Object outside Area'
 
-
     def plane(self, x, y):
-        if (1 < x < 10 and 4 < y < 13):
+        if 1 < x < 10 and 4 < y < 13:
             plane3 = self.loader.loadModel("modeleBS3D/Plane5.obj")
             plane3.setPos(x, y, 15)
             plane3.setHpr(180, -270, 180)
@@ -203,8 +208,7 @@ class Bship(ShowBase):
         else:
             self.logTextBox.text = 'Object outside Area'
 
-
-    #Model Spawn
+    # Model Spawn
 
     def submarineSpawn(self, bk_text):
         x, y = bk_text.split(" ")
@@ -214,7 +218,6 @@ class Bship(ShowBase):
         self.PLpos.append([x, y])
         self.submarine(x, y)
 
-
     def boatSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
@@ -222,7 +225,6 @@ class Bship(ShowBase):
         self.logTextBox.text = 'Boat deployed ' + str(self.b + 1) + '/2'
         self.PLpos.append([x, y])
         self.boat(x, y)
-
 
     def cruiserSpawn(self, bk_text):
         x, y = bk_text.split(" ")
@@ -232,16 +234,13 @@ class Bship(ShowBase):
         self.PLpos.append([x, y])
         self.cruiser(x, y)
 
-
-    def planeSpawn(self,bk_text):
+    def planeSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
         self.logTextBox.text = 'Plane deployed ' + str(self.p + 1) + '/2'
         self.PLpos.append([x, y])
         self.plane(x, y)
-
-
 
     def AISettup(self):
         c = 0
@@ -273,7 +272,6 @@ class Bship(ShowBase):
                 self.AIpos.append([x, y])
                 b += 1
 
-
     def check(self, bk_text):
         if self.PLpos == []:
             self.logTextBox.text = 'You lost!'
@@ -289,18 +287,15 @@ class Bship(ShowBase):
                 l.append(int(x))
                 l.append(int(y))
                 print(l)
-                if (1 < int(x) < 10 and 4 < int(y) < 13):
+                if 1 < int(x) < 10 and 4 < int(y) < 13:
                     if l in self.AIpos:
                         self.logTextBox.text = "Hit"
-                        self.PLpos -= l
                     else:
                         self.logTextBox.text = "Miss"
                 else:
                     self.logTextBox.text = 'Outside Area'
 
-
-
-        AIl =[]
+        AIl = []
         AIx = random.randint(2, 9)
         AIy = random.randint(5, 12)
         AIl.append(AIx)
@@ -317,7 +312,17 @@ class Bship(ShowBase):
                         AIl.append(AIx)
                         AIl.append(AIy)
                     self.AImem.append(AIl)
+                    # box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    # box.setPos(AIx, AIy, 0.25)
+                    # box.setScale(0.3)
+                    # box.setColor(1, 0.1, 0.1, 0.3)
+                    # box.reparentTo(self.render)
                 else:
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, 0.25)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
                     self.AImem.append(AIl)
 
 
