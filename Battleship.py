@@ -12,9 +12,15 @@ loadPrcFile("config/conf.prc")
 
 class Bship(ShowBase):
 
-    PLpos = []
-    AIpos = []
-    AImem = []
+    PLposb = []
+    PLposs = []
+    PLposp = []
+    AIposp = []
+    AIposs = []
+    AIposb = []
+    AImemb = []
+    AImems = []
+    AImemp = []
     logText = ''
     c = 0
     s = 0
@@ -214,33 +220,73 @@ class Bship(ShowBase):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        self.logTextBox.text = 'Submarine deployed ' + str(self.s + 1) + '/2'
-        self.PLpos.append([x, y])
-        self.submarine(x, y)
+        l = []
+        l2 = []
+        l.append(x)
+        l.append(y)
+        l2.append(x)
+        l2.append(y + 1)
+
+        if l in self.PLposs or l2 in self.PLposs:
+            self.logTextBox.text = 'There already is a unit on that position'
+        else:
+            self.logTextBox.text = 'Submarine deployed ' + str(self.s + 1) + '/2'
+            self.PLposs.append([x, y])
+            self.PLposs.append([x, y + 1])
+            self.submarine(x, y)
 
     def boatSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        self.logTextBox.text = 'Boat deployed ' + str(self.b + 1) + '/2'
-        self.PLpos.append([x, y])
-        self.boat(x, y)
+        l = []
+        l.append(x)
+        l.append(y)
+
+        if l in self.PLposb:
+            self.logTextBox.text = 'There already is a unit on that position'
+        else:
+            self.logTextBox.text = 'Boat deployed ' + str(self.b + 1) + '/2'
+            self.PLposb.append([x, y])
+            self.boat(x, y)
 
     def cruiserSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        self.logTextBox.text = 'Cruiser deployed ' + str(self.c + 1) + '/1'
-        self.PLpos.append([x, y])
-        self.cruiser(x, y)
+        l = []
+        l2 = []
+        l3 = []
+        l.append(x)
+        l.append(y)
+        l2.append(x)
+        l2.append(y + 1)
+        print(l2)
+        l3.append(x)
+        l3.append(y + 2)
+        if l in self.PLposb or l2 in self.PLposb or l3 in self.PLposb:
+            self.logTextBox.text = 'There already is a unit on that position'
+        else:
+            self.logTextBox.text = 'Cruiser deployed ' + str(self.c + 1) + '/1'
+            self.PLposb.append([x, y])
+            self.PLposb.append([x, y + 1])
+            self.PLposb.append([x, y + 2])
+            self.cruiser(x, y)
 
     def planeSpawn(self, bk_text):
         x, y = bk_text.split(" ")
         x = int(x)
         y = int(y)
-        self.logTextBox.text = 'Plane deployed ' + str(self.p + 1) + '/2'
-        self.PLpos.append([x, y])
-        self.plane(x, y)
+        l = []
+        l.append(x)
+        l.append(y)
+
+        if l in self.PLposp:
+            self.logTextBox.text = 'There already is a unit on that position'
+        else:
+            self.logTextBox.text = 'Plane deployed ' + str(self.p + 1) + '/2'
+            self.PLposp.append([x, y])
+            self.plane(x, y)
 
     def AISettup(self):
         c = 0
@@ -251,79 +297,225 @@ class Bship(ShowBase):
             if s < 2:
                 x = random.randint(2, 9)
                 y = random.randint(5, 11)
-                self.AIpos.append([x, y])
+                self.AIposs.append([x, y])
+                self.AIposs.append([x, y + 1])
                 s += 1
 
             elif c < 1:
                 x = random.randint(2, 9)
                 y = random.randint(5, 10)
-                self.AIpos.append([x, y])
+                self.AIposb.append([x, y])
+                self.AIposb.append([x, y + 1])
+                self.AIposb.append([x, y + 2])
                 c += 1
 
             elif p < 2:
                 x = random.randint(2, 9)
                 y = random.randint(5, 12)
-                self.AIpos.append([x, y])
+                self.AIposp.append([x, y])
                 p += 1
 
             elif b < 2:
                 x = random.randint(2, 9)
                 y = random.randint(5, 12)
-                self.AIpos.append([x, y])
+                self.AIposb.append([x, y])
                 b += 1
 
     def check(self, bk_text):
-        if self.PLpos == []:
-            self.logTextBox.text = 'You lost!'
-        elif self.AIpos == []:
-            self.logTextBox.text = 'You won!'
-        else:
-            l = []
-            if bk_text == "":
-                pass
+        if bk_text[0] == '1':
+            bk_text = bk_text[2:]
+            if self.PLposs == []:
+                self.logTextBox.text = 'You lost!'
+            elif self.AIposs == []:
+                self.logTextBox.text = 'You won!'
             else:
-                x, y = bk_text.split(" ")
-
-                l.append(int(x))
-                l.append(int(y))
-                print(l)
-                if 1 < int(x) < 10 and 4 < int(y) < 13:
-                    if l in self.AIpos:
-                        self.logTextBox.text = "Hit"
-                    else:
-                        self.logTextBox.text = "Miss"
+                l = []
+                if bk_text == "":
+                    pass
                 else:
-                    self.logTextBox.text = 'Outside Area'
+                    x, y = bk_text.split(" ")
+
+                    l.append(int(x))
+                    l.append(int(y))
+                    print(l)
+                    if 1 < int(x) < 10 and 4 < int(y) < 13:
+                        if l in self.AIposs:
+                            self.logTextBox.text = "Hit"
+                            self.hit = OnscreenText(text='X', pos=(
+                            0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                        else:
+                            self.logTextBox.text = "Miss"
+                            self.hit = OnscreenText(text='O', pos=(
+                            0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                    else:
+                        self.logTextBox.text = 'Outside Area'
+        elif bk_text[0] == '2':
+            bk_text = bk_text[2:]
+            if self.PLposb == []:
+                self.logTextBox.text = 'You lost!'
+            elif self.AIposb == []:
+                self.logTextBox.text = 'You won!'
+            else:
+                l = []
+                if bk_text == "":
+                    pass
+                else:
+                    x, y = bk_text.split(" ")
+
+                    l.append(int(x))
+                    l.append(int(y))
+                    print(l)
+                    if 1 < int(x) < 10 and 4 < int(y) < 13:
+                        if l in self.AIposb:
+                            self.logTextBox.text = "Hit"
+                            self.hit = OnscreenText(text='X', pos=(
+                                0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                        else:
+                            self.logTextBox.text = "Miss"
+                            self.hit = OnscreenText(text='O', pos=(
+                                0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                    else:
+                        self.logTextBox.text = 'Outside Area'
+        elif bk_text[0] == '3':
+            bk_text = bk_text[2:]
+            if self.PLposp == []:
+                self.logTextBox.text = 'You lost!'
+            elif self.AIposp == []:
+                self.logTextBox.text = 'You won!'
+            else:
+                l = []
+                if bk_text == "":
+                    pass
+                else:
+                    x, y = bk_text.split(" ")
+
+                    l.append(int(x))
+                    l.append(int(y))
+                    print(l)
+                    if 1 < int(x) < 10 and 4 < int(y) < 13:
+                        if l in self.AIposp:
+                            self.logTextBox.text = "Hit"
+                            self.hit = OnscreenText(text='X', pos=(
+                                1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                        else:
+                            self.logTextBox.text = "Miss"
+                            self.hit = OnscreenText(text='O', pos=(
+                                1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                    scale=0.05,
+                                                    align=TextNode.ALeft)
+                    else:
+                        self.logTextBox.text = 'Outside Area'
 
         AIl = []
         AIx = random.randint(2, 9)
         AIy = random.randint(5, 12)
         AIl.append(AIx)
         AIl.append(AIy)
-        if AIl in self.PLpos:
-            self.logTextBox.text = 'One of our units has been hit!'
-        else:
-            for i in range(len(self.AImem) + 1):
-                if AIl in self.AImem:
-                    while AIl in self.AImem:
+        AIz = random.randint(1, 3)
+        print(AIz)
+        if AIz == 1:
+            if AIl in self.PLposs:
+                self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, -13)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
+            else:
+
+                if AIl in self.AImems:
+                    while AIl in self.AImems:
                         AIl = []
                         AIx = random.randint(2, 9)
                         AIy = random.randint(5, 12)
                         AIl.append(AIx)
                         AIl.append(AIy)
-                    self.AImem.append(AIl)
-                    # box = self.loader.loadModel("modeleBS3D/cube.obj")
-                    # box.setPos(AIx, AIy, 0.25)
-                    # box.setScale(0.3)
-                    # box.setColor(1, 0.1, 0.1, 0.3)
-                    # box.reparentTo(self.render)
+                    self.AImems.append(AIl)
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, -13.75)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
+                else:
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, -13.75)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
+                    self.AImems.append(AIl)
+        if AIz == 2:
+            if AIl in self.PLposb:
+                self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, 0.5)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
+            else:
+
+                if AIl in self.AImemb:
+                    while AIl in self.AImemb:
+                        AIl = []
+                        AIx = random.randint(2, 9)
+                        AIy = random.randint(5, 12)
+                        AIl.append(AIx)
+                        AIl.append(AIy)
+                    self.AImems.append(AIl)
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, 0.25)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
                 else:
                     box = self.loader.loadModel("modeleBS3D/cube.obj")
                     box.setPos(AIx, AIy, 0.25)
                     box.setScale(0.3)
                     box.setColor(1, 0.1, 0.1, 0.3)
                     box.reparentTo(self.render)
-                    self.AImem.append(AIl)
+                    self.AImemb.append(AIl)
+        if AIz == 3:
+            if AIl in self.PLposp:
+                self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, 15)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
+            else:
+
+                if AIl in self.AImemp:
+                    while AIl in self.AImemp:
+                        AIl = []
+                        AIx = random.randint(2, 9)
+                        AIy = random.randint(5, 12)
+                        AIl.append(AIx)
+                        AIl.append(AIy)
+                    self.AImemp.append(AIl)
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, 14.25)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
+                else:
+                    box = self.loader.loadModel("modeleBS3D/cube.obj")
+                    box.setPos(AIx, AIy, 14.25)
+                    box.setScale(0.3)
+                    box.setColor(1, 0.1, 0.1, 0.3)
+                    box.reparentTo(self.render)
+                    self.AImemp.append(AIl)
 
 
 game = Bship()
