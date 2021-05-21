@@ -60,8 +60,6 @@ class Bship(ShowBase):
                    "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
         mksgrids = "Submarines\n  2    3    4    5    6    7    8    9\n5 |     |     |     |     |     |     |     |     |\n   --------------------------------\n6 |     |     |     |     |     |     |     |     |\n   --------------------------------\n7 |     |     |     |     |     |     |     |     |\n   --------------------------------\n8 |     |     |     |     |     |     |     |     |\n   --------------------------------\n" \
                    "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
-
-
         showx = OnscreenText(text="X", pos=(0.56, 0.43), scale=0.065, fg=(0, 0, 0, 1), mayChange=0)
         showy = OnscreenText(text="Y", pos=(0.325, 0.675), scale=0.065, fg=(0, 0, 0, 1), mayChange=0)
         xorient = OnscreenText(text="X", pos=(-0.7, 0.45), scale=0.2, fg=(0, 0, 0, 1), mayChange=0)
@@ -130,10 +128,6 @@ class Bship(ShowBase):
 
         return task.cont
 
-
-
-
-
     # Entities
 
     def corners_b(self):
@@ -167,12 +161,6 @@ class Bship(ShowBase):
                 box.setTexture(texsubapa)
                 box.reparentTo(self.render)
 
-
-
-
-
-
-
     def cruiser(self, x, y):
 
         if 1 < x < 10 and 4 < y < 11:
@@ -187,10 +175,7 @@ class Bship(ShowBase):
         else:
             self.logTextBox.text = 'Object outside Area'
 
-
     def boat(self, x, y):
-
-
         if 1 < x < 10 and 4 < y < 13:
             boat2 = self.loader.load_model("modeleBS3D/Boat2.obj")
             boat2.setPos(x, y, 0.5)
@@ -228,12 +213,6 @@ class Bship(ShowBase):
             self.p += 1
         else:
             self.logTextBox.text = 'Object outside Area'
-
-
-
-
-
-
 
     # Model Spawn
 
@@ -309,12 +288,6 @@ class Bship(ShowBase):
             self.PLposp.append([x, y])
             self.plane(x, y)
 
-
-
-
-
-
-
     def AISettup(self):
         c = 0
         p = 0
@@ -347,11 +320,6 @@ class Bship(ShowBase):
                 y = random.randint(5, 12)
                 self.AIposb.append([x, y])
                 b += 1
-
-
-
-
-
 
     def check(self, bk_text):
         if bk_text[0] == '1':
@@ -448,9 +416,6 @@ class Bship(ShowBase):
                     else:
                         self.logTextBox.text = 'Outside Area'
 
-
-
-
         AIl = []
         AIx = random.randint(2, 9)
         AIy = random.randint(5, 12)
@@ -461,6 +426,12 @@ class Bship(ShowBase):
         if AIz == 1:
             if AIl in self.PLposs:
                 self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, -13)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
             else:
 
                 if AIl in self.AImems:
@@ -486,6 +457,12 @@ class Bship(ShowBase):
         if AIz == 2:
             if AIl in self.PLposb:
                 self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, 0.5)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
             else:
 
                 if AIl in self.AImemb:
@@ -511,6 +488,12 @@ class Bship(ShowBase):
         if AIz == 3:
             if AIl in self.PLposp:
                 self.logTextBox.text = 'One of our units has been hit!'
+                box = self.loader.loadModel("modeleBS3D/cube.obj")
+                box.setPos(AIx, AIy, 15)
+                box.setScale(0.48)
+                texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
+                box.setTexture(texfoc)
+                box.reparentTo(self.render)
             else:
 
                 if AIl in self.AImemp:
