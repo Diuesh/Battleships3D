@@ -432,6 +432,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposs.remove(AIl)
             else:
 
                 if AIl in self.AImems:
@@ -463,6 +464,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposb.remove(AIl)
             else:
 
                 if AIl in self.AImemb:
@@ -494,6 +496,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposp.remove(AIl)
             else:
 
                 if AIl in self.AImemp:
