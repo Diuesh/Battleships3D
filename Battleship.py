@@ -52,7 +52,7 @@ class Bship(ShowBase):
         self.logTextBox = OnscreenText(text='', pos=(-0.145, 0.11, 0), scale=0.05, align=TextNode.ALeft)
         self.logTextBox.reparentTo(self.myFrame)
         constanttext = OnscreenText(text="write h for help, n to hide help", pos=(0.4, -0.9), scale=0.05, fg=(0, 0, 0, 1), mayChange=0)
-        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.68), scale=0.055, fg=(0, 0, 0, 1), mayChange=1)
+        self.htext = OnscreenText(text=self.helptext, pos=(0.325, -0.625), scale=0.055, fg=(0, 0, 0, 1), mayChange=1)
         coordtext = OnscreenText(text="b(1<x<10 si 4<y<13),\ns(1<x<10 si 4<y<12),\np(1<x<10 si 4<y<13),\nc(1<x<10 si 4<y<11)", pos=(1.5, -0.4), scale=0.05, fg=(0, 0, 0, 1), mayChange=0)
         mksgridp = "     Planes\n  2    3    4    5    6    7    8    9\n5 |     |     |     |     |     |     |     |     |\n   --------------------------------\n6 |     |     |     |     |     |     |     |     |\n   --------------------------------\n7 |     |     |     |     |     |     |     |     |\n   --------------------------------\n8 |     |     |     |     |     |     |     |     |\n   --------------------------------\n" \
                    "9 |     |     |     |     |     |     |     |     |\n   --------------------------------\n10|     |     |     |     |     |     |     |     |\n   --------------------------------\n11 |     |     |     |     |     |     |     |     |\n   --------------------------------\n12|     |     |     |     |     |     |     |     |"
@@ -97,7 +97,7 @@ class Bship(ShowBase):
                 else:
                     self.logTextBox.text = 'Cruisers limit reached 1/1'
             elif bk_text[0] == 'h':
-                self.htext.text = "Ctrl + 1/2/3 schimba planul\nplasarea se face in felul urmator:\ns/p/b/c coord x apoi coord y Ex: b 5 8\nalt+F4 pentru inchidere"
+                self.htext.text = "Ctrl + 1/2/3 schimba planul\nplasarea se face in felul urmator:\ns/p/b/c coord x apoi coord y Ex: b 5 8\nPentru atac formatul este:\n(planul)1/2/3 coord x apoi coord y Ex 3 8 10"
             elif bk_text[0] == 'n':
                 self.htext.text = ""
             elif bk_text[0] == 'p':
