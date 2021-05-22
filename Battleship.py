@@ -107,7 +107,7 @@ class Bship(ShowBase):
                 else:
                     self.logTextBox.text = 'Planes limit reached 2/2'
             else:
-                if self.c != 1 and self.b != 2 and self.s != 2 and self.p != 2:
+                if self.c != 1 or self.b != 2 or self.s != 2 or self.p != 2:
                     self.logTextBox.text = 'Preparation phase still ongoing\nPlease deploy all your units\n'
                 else:
                     self.check(bk_text)
@@ -322,13 +322,13 @@ class Bship(ShowBase):
                 b += 1
 
     def check(self, bk_text):
-        if bk_text[0] == '1':
-            bk_text = bk_text[2:]
-            if self.PLposs == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposs == []:
-                self.logTextBox.text = 'You won!'
-            else:
+        if self.PLposs == [] and self.PLposb == [] and self.PLposp == []:
+            self.logTextBox.text = 'You lost!'
+        elif self.AIposs == [] and self.AIposb == [] and self.AIposp == []:
+            self.logTextBox.text = 'You won!'
+        else:
+            if bk_text[0] == '1':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
@@ -353,13 +353,8 @@ class Bship(ShowBase):
                                                     align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
-        elif bk_text[0] == '2':
-            bk_text = bk_text[2:]
-            if self.PLposb == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposb == []:
-                self.logTextBox.text = 'You won!'
-            else:
+            elif bk_text[0] == '2':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
@@ -379,18 +374,13 @@ class Bship(ShowBase):
                         else:
                             self.logTextBox.text = "Miss"
                             self.hit = OnscreenText(text='O', pos=(
-                                0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                    0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
-        elif bk_text[0] == '3':
-            bk_text = bk_text[2:]
-            if self.PLposp == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposp == []:
-                self.logTextBox.text = 'You won!'
-            else:
+            elif bk_text[0] == '3':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
@@ -405,14 +395,14 @@ class Bship(ShowBase):
                             self.logTextBox.text = "Hit"
                             self.hit = OnscreenText(text='X', pos=(
                                 1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                         else:
                             self.logTextBox.text = "Miss"
                             self.hit = OnscreenText(text='O', pos=(
                                 1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
 
