@@ -78,14 +78,12 @@ class Bship(ShowBase):
         try:
             if bk_text[0] == 's':
                 if self.s <= 1:
-
                     t = bk_text[2:]
                     self.submarineSpawn(t)
                 else:
                     self.logTextBox.text = 'Submarines limit reached 2/2'
             elif bk_text[0] == 'b':
                 if self.b <= 1:
-
                     t = bk_text[2:]
                     self.boatSpawn(t)
                 else:
@@ -107,7 +105,7 @@ class Bship(ShowBase):
                 else:
                     self.logTextBox.text = 'Planes limit reached 2/2'
             else:
-                if self.c != 1 and self.b != 2 and self.s != 2 and self.p != 2:
+                if self.c != 1 or self.b != 2 or self.s != 2 or self.p != 2:
                     self.logTextBox.text = 'Preparation phase still ongoing\nPlease deploy all your units\n'
                 else:
                     self.check(bk_text)
@@ -115,7 +113,6 @@ class Bship(ShowBase):
             self.logTextBox.text = 'Incorrect input!Try again'
 
     def movCameraTask(self, task):
-
         pos = self.camera.getPos()
         if keyboard.is_pressed('ctrl'):
             if keyboard.is_pressed('1'):
@@ -125,7 +122,6 @@ class Bship(ShowBase):
             if keyboard.is_pressed('3'):
                 pos.z = 21
         self.camera.setPos(pos)
-
         return task.cont
 
     # Entities
@@ -162,7 +158,6 @@ class Bship(ShowBase):
                 box.reparentTo(self.render)
 
     def cruiser(self, x, y):
-
         if 1 < x < 10 and 4 < y < 11:
             carrier = self.loader.loadModel("modeleBS3D/Carrier.obj")
             carrier.setPos(x, y + 1, 0.5)
@@ -226,7 +221,6 @@ class Bship(ShowBase):
         l.append(y)
         l2.append(x)
         l2.append(y + 1)
-
         if l in self.PLposs or l2 in self.PLposs:
             self.logTextBox.text = 'There already is a unit on that position'
         else:
@@ -242,7 +236,6 @@ class Bship(ShowBase):
         l = []
         l.append(x)
         l.append(y)
-
         if l in self.PLposb:
             self.logTextBox.text = 'There already is a unit on that position'
         else:
@@ -280,7 +273,6 @@ class Bship(ShowBase):
         l = []
         l.append(x)
         l.append(y)
-
         if l in self.PLposp:
             self.logTextBox.text = 'There already is a unit on that position'
         else:
@@ -300,7 +292,6 @@ class Bship(ShowBase):
                 self.AIposs.append([x, y])
                 self.AIposs.append([x, y + 1])
                 s += 1
-
             elif c < 1:
                 x = random.randint(2, 9)
                 y = random.randint(5, 10)
@@ -308,13 +299,11 @@ class Bship(ShowBase):
                 self.AIposb.append([x, y + 1])
                 self.AIposb.append([x, y + 2])
                 c += 1
-
             elif p < 2:
                 x = random.randint(2, 9)
                 y = random.randint(5, 12)
                 self.AIposp.append([x, y])
                 p += 1
-
             elif b < 2:
                 x = random.randint(2, 9)
                 y = random.randint(5, 12)
@@ -322,50 +311,37 @@ class Bship(ShowBase):
                 b += 1
 
     def check(self, bk_text):
-        if bk_text[0] == '1':
-            bk_text = bk_text[2:]
-            if self.PLposs == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposs == []:
-                self.logTextBox.text = 'You won!'
-            else:
+        if self.PLposs == [] and self.PLposb == [] and self.PLposp == []:
+            self.logTextBox.text = 'You lost!'
+        elif self.AIposs == [] and self.AIposb == [] and self.AIposp == []:
+            self.logTextBox.text = 'You won!'
+        else:
+            if bk_text[0] == '1':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
                 else:
                     x, y = bk_text.split(" ")
-
                     l.append(int(x))
                     l.append(int(y))
                     print(l)
                     if 1 < int(x) < 10 and 4 < int(y) < 13:
                         if l in self.AIposs:
                             self.logTextBox.text = "Hit"
-                            self.hit = OnscreenText(text='X', pos=(
-                            0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                            self.hit = OnscreenText(text='X', pos=(0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0), scale=0.05, align=TextNode.ALeft)
                         else:
                             self.logTextBox.text = "Miss"
-                            self.hit = OnscreenText(text='O', pos=(
-                            0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                            self.hit = OnscreenText(text='O', pos=(0.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0), scale=0.05, align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
-        elif bk_text[0] == '2':
-            bk_text = bk_text[2:]
-            if self.PLposb == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposb == []:
-                self.logTextBox.text = 'You won!'
-            else:
+            elif bk_text[0] == '2':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
                 else:
                     x, y = bk_text.split(" ")
-
                     l.append(int(x))
                     l.append(int(y))
                     print(l)
@@ -379,24 +355,18 @@ class Bship(ShowBase):
                         else:
                             self.logTextBox.text = "Miss"
                             self.hit = OnscreenText(text='O', pos=(
-                                0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                    0.89 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
-        elif bk_text[0] == '3':
-            bk_text = bk_text[2:]
-            if self.PLposp == []:
-                self.logTextBox.text = 'You lost!'
-            elif self.AIposp == []:
-                self.logTextBox.text = 'You won!'
-            else:
+            elif bk_text[0] == '3':
+                bk_text = bk_text[2:]
                 l = []
                 if bk_text == "":
                     pass
                 else:
                     x, y = bk_text.split(" ")
-
                     l.append(int(x))
                     l.append(int(y))
                     print(l)
@@ -405,14 +375,14 @@ class Bship(ShowBase):
                             self.logTextBox.text = "Hit"
                             self.hit = OnscreenText(text='X', pos=(
                                 1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                         else:
                             self.logTextBox.text = "Miss"
                             self.hit = OnscreenText(text='O', pos=(
                                 1.39 + 0.0442857142857143 * (int(x) - 2), 0.88 - 0.0592857142857143 * (int(y) - 5), 0),
-                                                    scale=0.05,
-                                                    align=TextNode.ALeft)
+                                                        scale=0.05,
+                                                        align=TextNode.ALeft)
                     else:
                         self.logTextBox.text = 'Outside Area'
 
@@ -432,6 +402,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposs.remove(AIl)
             else:
 
                 if AIl in self.AImems:
@@ -463,6 +434,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposb.remove(AIl)
             else:
 
                 if AIl in self.AImemb:
@@ -494,6 +466,7 @@ class Bship(ShowBase):
                 texfoc = self.loader.load_texture("modeleBS3D/flama.jpg")
                 box.setTexture(texfoc)
                 box.reparentTo(self.render)
+                self.PLposp.remove(AIl)
             else:
 
                 if AIl in self.AImemp:
